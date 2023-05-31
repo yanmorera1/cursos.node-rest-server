@@ -1,18 +1,18 @@
 import { Schema, model } from 'mongoose'
 
 const UserSchema = Schema({
-    nombre: {
+    name: {
         type: String,
-        required: [true, 'El nombre es obligatorio'],
+        required: [true, 'Name required'],
     },
     email: {
         type: String,
-        required: [true, 'El correo es obligatorio'],
+        required: [true, 'Email required'],
         unique: true,
     },
     password: {
         type: String,
-        required: [true, 'La contrasenia es obligatorio'],
+        required: [true, 'Password required'],
     },
     img: {
         type: String,
@@ -31,5 +31,10 @@ const UserSchema = Schema({
         default: false,
     },
 })
+
+UserSchema.methods.toJSON = function () {
+    const { __v, password, ...user } = this.toObject()
+    return user
+}
 
 export default model('User', UserSchema)

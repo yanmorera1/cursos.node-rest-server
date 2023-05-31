@@ -6,24 +6,133 @@ import {
     usersPost,
     usersPut,
 } from '../controllers/users.controller.js'
+import { check } from 'express-validator'
+import { validateFields } from '../middlewares/validate-fields.js'
+import {
+    emailExists,
+    existsUserById,
+    isValidRol,
+} from '../helpers/db-validators.js'
 
 export const router = Router()
 
 /**
  * @openapi
- * /:
+ * /users:
  *   get:
- *     description: Welcome to swagger-jsdoc!
+ *     tags:
+ *      - users
+ *     description: Gets all users
  *     responses:
  *       200:
  *         description: Returns a mysterious string.
  */
 router.get('/', usersGet)
 
-router.put('/:id', usersPut)
+/**
+ * @openapi
+ * /users:
+ *  post:
+ *      tags:
+ *          - users
+ *      description: Creates an user
+ *      parameters:
+ *          -   in: user
+ *              name: body
+ *              required: true
+ *              schema:
+ *                  type: User
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
+router.post(
+    '/',
+    [
+        check('email', 'Email is not valid').isEmail(),
+        check('name', 'Name is required').not().isEmpty(),
+        check(
+            'password',
+            'Password is required and more than 6 letters'
+        ).isLength({ min: 6 }),
+        // check('role', 'Role is not valid').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+        check('role').custom(isValidRol),
+        check('email').custom(emailExists),
+        validateFields,
+    ],
+    usersPost
+)
 
-router.post('/', usersPost)
+/**
+ * @openapi
+ * /users/{id}:
+ *  put:
+ *      tags:
+ *          - users
+ *      description: Updates a user
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              schema:
+ *                  type: integer
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
+router.put(
+    '/:id',
+    [
+        check('id', 'Is not an valid id').isMongoId(),
+        check('id').not().custom(existsUserById),
+        check('role').custom(isValidRol),
+        validateFields,
+    ],
+    usersPut
+)
 
-router.delete('/', usersDelete)
+/**
+ * @openapi
+ * /users/{id}:
+ *  delete:
+ *      tags:
+ *          - users
+ *      description: Deletes a user
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              schema:
+ *                  type: integer
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
+router.delete(
+    '/:id',
+    [
+        check('id', 'Is not an valid id').isMongoId(),
+        check('id').not().custom(existsUserById),
+        validateFields,
+    ],
+    usersDelete
+)
 
-router.patch('/', usersPatch)
+/**
+ * @openapi
+ * /users/{id}:
+ *  patch:
+ *      tags:
+ *          - users
+ *      description: Updates a user
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              schema:
+ *                  type: integer
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
+router.patch('/:id', usersPatch)

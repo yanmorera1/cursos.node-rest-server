@@ -5,11 +5,11 @@ const options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Coffee API',
+            title: 'Coffee Store API',
             version: '1.0.0',
         },
     },
-    apis: ['./routes/*.route.js'],
+    apis: ['./routes/*.routes.js'],
 }
 
 export const openapiSpecification = swaggerJsdoc(options)
