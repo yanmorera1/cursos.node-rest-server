@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { check } from 'express-validator'
 import { googleSignIn, login } from '../controllers/auth.controller.js'
-import { validateFields } from '../middlewares/validate-fields.js'
+import { validateFields } from '../middlewares/index.js'
 
 export const router = Router()
 

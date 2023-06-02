@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs'
 import { response, request } from 'express'
-import User from '../models/user.js'
+import { User } from '../models/index.js'
 
 export const usersPost = async (req, res) => {
     const { name, email, password, role } = req.body
