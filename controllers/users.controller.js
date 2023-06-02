@@ -48,12 +48,7 @@ export const usersPut = async (req, res) => {
 
 export const usersDelete = async (req, res) => {
     const { id } = req.params
-
-    //delete
-    // const user = await User.findByIdAndDelete(id)
-
     const user = await User.findByIdAndUpdate(id, { status: false })
-
     res.json(user)
 }
 

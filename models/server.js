@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import { router } from '../routes/user.routes.js'
+import { router as userRouter } from '../routes/user.routes.js'
+import { router as authRouter } from '../routes/auth.routes.js'
 import { dbConnection } from '../database/config.db.js'
 import swaggerUi from 'swagger-ui-express'
 import { openapiSpecification } from '../docs/swagger.docs.js'
@@ -10,6 +11,7 @@ export default class Server {
         this.app = express()
         this.port = process.env.PORT
         this.usersPath = '/api/users'
+        this.authPath = '/api/auth'
 
         //DB connection
         this.connectToDb()
@@ -39,7 +41,8 @@ export default class Server {
     }
 
     routes() {
-        this.app.use(this.usersPath, router)
+        this.app.use(this.usersPath, userRouter)
+        this.app.use(this.authPath, authRouter)
     }
 
     listen() {

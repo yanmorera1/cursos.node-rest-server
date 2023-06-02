@@ -1,4 +1,6 @@
 import { Router } from 'express'
+import { check } from 'express-validator'
+
 import {
     usersDelete,
     usersGet,
@@ -6,8 +8,14 @@ import {
     usersPost,
     usersPut,
 } from '../controllers/users.controller.js'
-import { check } from 'express-validator'
-import { validateFields } from '../middlewares/validate-fields.js'
+
+import {
+    validateFields,
+    validateJWT,
+    haveRole,
+    isAdminRole,
+} from '../middlewares/index.js'
+
 import {
     emailExists,
     existsUserById,
@@ -111,6 +119,9 @@ router.put(
 router.delete(
     '/:id',
     [
+        validateJWT,
+        // isAdminRole,
+        haveRole('ADMIN_ROLE'),
         check('id', 'Is not an valid id').isMongoId(),
         check('id').not().custom(existsUserById),
         validateFields,
