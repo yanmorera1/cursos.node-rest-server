@@ -128,22 +128,3 @@ router.delete(
     ],
     usersDelete
 )
-
-/**
- * @openapi
- * /users/{id}:
- *  patch:
- *      tags:
- *          - users
- *      description: Updates a user
- *      parameters:
- *          -   in: path
- *              name: id
- *              required: true
- *              schema:
- *                  type: integer
- *      responses:
- *          200:
- *              description: Returns a mysterious string.
- */
-router.patch('/:id', usersPatch)

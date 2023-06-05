@@ -1,14 +1,13 @@
 import { query, request, response } from 'express'
 import { Category } from '../models/index.js'
 
-//getCategories - paginated - total - populate
 export const getCategories = async (req = request, res = response) => {
     const { limit = 5, skip = 0 } = req.query
     const query = { status: true }
 
     const [total, categories] = await Promise.all([
         Category.countDocuments(query),
-        Category.find(query).skip(skip).limit(limit).populate('user'),
+        Category.find(query).skip(skip).limit(limit).populate('user', 'name'),
     ])
 
     res.json({
@@ -17,12 +16,11 @@ export const getCategories = async (req = request, res = response) => {
     })
 }
 
-//getCategory - populate
 export const getCategory = async (req = request, res = response) => {
     const { id } = req.query
     const query = { id, status: true }
 
-    const category = await Category.findOne(query).populate('user')
+    const category = await Category.findOne(query).populate('user', 'name')
 
     res.json(category)
 }
@@ -47,6 +45,23 @@ export const createCategory = async (req = request, res = response) => {
     return res.status(201).json(category)
 }
 
-//updateCategory
+export const updateCategory = async (req = request, res = response) => {
+    const { id } = req.params
+    const { user, status, ...rest } = req.body
 
-//deleteCategory
+    rest.name = data.name.toUpperCase()
+    rest.user = req.user._id
+
+    const category = await Category.findByIdAndUpdate(id, rest)
+    res.json(category)
+}
+
+export const deleteCategory = async (req = request, res = response) => {
+    const { id } = req.params
+    const category = await Category.findByIdAndUpdate(
+        id,
+        { status: false },
+        { new: true }
+    )
+    res.json(category)
+}

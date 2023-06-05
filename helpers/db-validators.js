@@ -1,4 +1,4 @@
-import { User, Role, Category } from '../models/index.js'
+import { User, Role, Category, Product } from '../models/index.js'
 
 export const isValidRol = async (role = '') => {
     const roleExists = await Role.findOne({ role })
@@ -25,5 +25,12 @@ export const categoryExists = async (id) => {
     const existsCategory = await Category.findOne({ id })
     if (!existsCategory) {
         throw new Error(`Category with id ${id} doesnt exists`)
+    }
+}
+
+export const productExists = async (id) => {
+    const existsProduct = await Product.findOne({ _id: id })
+    if (!existsProduct) {
+        throw new Error(`Product with id ${id} doesnt exists`)
     }
 }

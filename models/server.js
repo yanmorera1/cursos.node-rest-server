@@ -3,6 +3,7 @@ import cors from 'cors'
 import { router as userRouter } from '../routes/user.routes.js'
 import { router as authRouter } from '../routes/auth.routes.js'
 import { router as categoriesRouter } from '../routes/categories.routes.js'
+import { router as productsRouter } from '../routes/products.routes.js'
 import { dbConnection } from '../database/config.db.js'
 import swaggerUi from 'swagger-ui-express'
 import { openapiSpecification } from '../docs/swagger.docs.js'
@@ -15,6 +16,7 @@ export default class Server {
             users: '/api/users',
             auth: '/api/auth',
             categories: '/api/categories',
+            products: '/api/products',
         }
 
         //DB connection
@@ -48,6 +50,7 @@ export default class Server {
         this.app.use(this.paths.users, userRouter)
         this.app.use(this.paths.auth, authRouter)
         this.app.use(this.paths.categories, categoriesRouter)
+        this.app.use(this.paths.products, productsRouter)
     }
 
     listen() {
