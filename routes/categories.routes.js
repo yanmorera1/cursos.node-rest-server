@@ -16,8 +16,36 @@ import { categoryExists } from '../helpers/db-validators.js'
 
 export const router = Router()
 
+/**
+ * @openapi
+ * /api/categories:
+ *   get:
+ *     tags:
+ *      - categories
+ *     description: Gets all categories
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
 router.get('/', getCategories)
 
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   get:
+ *     tags:
+ *      - categories
+ *     parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              schema:
+ *                  type: string
+ *     description: Gets category by id
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
 router.get(
     '/:id',
     [
@@ -28,6 +56,23 @@ router.get(
     getCategory
 )
 
+/**
+ * @openapi
+ * /api/categories:
+ *  post:
+ *      tags:
+ *          - categories
+ *      description: Creates an category
+ *      parameters:
+ *          -   in: user
+ *              name: body
+ *              required: true
+ *              schema:
+ *                  type: User
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
 router.post(
     '/',
     [

@@ -26,7 +26,7 @@ export const router = Router()
 
 /**
  * @openapi
- * /users:
+ * /api/users:
  *   get:
  *     tags:
  *      - users
@@ -39,7 +39,7 @@ router.get('/', usersGet)
 
 /**
  * @openapi
- * /users:
+ * /api/users:
  *  post:
  *      tags:
  *          - users
@@ -73,7 +73,7 @@ router.post(
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *  put:
  *      tags:
  *          - users
@@ -101,7 +101,7 @@ router.put(
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *  delete:
  *      tags:
  *          - users

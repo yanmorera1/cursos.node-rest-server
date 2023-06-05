@@ -32,6 +32,23 @@ router.post(
     login
 )
 
+/**
+ * @openapi
+ * /api/auth/google:
+ *  post:
+ *      tags:
+ *          - auth
+ *      description: Login with google
+ *      parameters:
+ *          -   in: user
+ *              name: body
+ *              required: true
+ *              schema:
+ *                  type: User
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
 router.post(
     '/google',
     [check('id_token', 'Id_Token is required').not().isEmpty(), validateFields],
