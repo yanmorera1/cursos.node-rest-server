@@ -83,6 +83,23 @@ router.post(
     createCategory
 )
 
+/**
+ * @openapi
+ * /api/categories:
+ *  put:
+ *      tags:
+ *          - categories
+ *      description: Creates an category
+ *      parameters:
+ *          -   in: user
+ *              name: body
+ *              required: true
+ *              schema:
+ *                  type: User
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
 router.put(
     '/:id',
     [
@@ -95,6 +112,23 @@ router.put(
     updateCategory
 )
 
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *  delete:
+ *      tags:
+ *          - categories
+ *      description: Deletes a category
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              schema:
+ *                  type: integer
+ *      responses:
+ *          200:
+ *              description: Returns a mysterious string.
+ */
 router.delete(
     '/:id',
     [

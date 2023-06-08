@@ -4,6 +4,7 @@ import { router as userRouter } from '../routes/user.routes.js'
 import { router as authRouter } from '../routes/auth.routes.js'
 import { router as categoriesRouter } from '../routes/categories.routes.js'
 import { router as productsRouter } from '../routes/products.routes.js'
+import { router as searchRouter } from '../routes/search.routes.js'
 import { dbConnection } from '../database/config.db.js'
 import swaggerUi from 'swagger-ui-express'
 import { openapiSpecification } from '../docs/swagger.docs.js'
@@ -13,10 +14,11 @@ export default class Server {
         this.app = express()
         this.port = process.env.PORT
         this.paths = {
-            users: '/api/users',
             auth: '/api/auth',
             categories: '/api/categories',
+            users: '/api/users',
             products: '/api/products',
+            search: '/api/search',
         }
 
         //DB connection
@@ -51,6 +53,7 @@ export default class Server {
         this.app.use(this.paths.auth, authRouter)
         this.app.use(this.paths.categories, categoriesRouter)
         this.app.use(this.paths.products, productsRouter)
+        this.app.use(this.paths.search, searchRouter)
     }
 
     listen() {

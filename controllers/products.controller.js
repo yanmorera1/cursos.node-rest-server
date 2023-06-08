@@ -32,20 +32,18 @@ export const getProduct = async (req = request, res = response) => {
 }
 
 export const addProduct = async (req = request, res = response) => {
-    const { name, price, category, description } = req.body
-    const productExists = await Product.findOne({ name, category })
+    const { name, user, status, ...rest } = req.body
+    const productExists = await Product.findOne({ name })
     if (productExists) {
         return res.json({
-            msg: `Product with name ${name} and categoryId ${category} already exists`,
+            msg: `Product with name ${name} already exists`,
         })
     }
 
     const data = {
-        name,
-        price,
-        category,
-        description,
+        name: name.toUpperCase(),
         user: req.user._id,
+        ...rest,
     }
 
     const product = await new Product(data)
@@ -53,15 +51,20 @@ export const addProduct = async (req = request, res = response) => {
 
     return res.status(201).json(product)
 }
+
 export const updateProduct = async (req = request, res = response) => {
-    const { id } = req.query
+    const { id } = req.params
     const { user, status, ...rest } = req.body
 
+    if (rest.name) {
+        rest.name = rest.name.toUpperCase()
+    }
     rest.user = req.user._id
-    const product = await Product.findByIdAndUpdate(id, rest)
 
+    const product = await Product.findByIdAndUpdate(id, rest, { new: true })
     res.json(product)
 }
+
 export const deleteProduct = async (req = request, res = response) => {
     const { id } = req.query
     const product = await Product.findByIdAndUpdate(

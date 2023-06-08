@@ -49,7 +49,7 @@ export const updateCategory = async (req = request, res = response) => {
     const { id } = req.params
     const { user, status, ...rest } = req.body
 
-    rest.name = data.name.toUpperCase()
+    rest.name = rest.name.toUpperCase()
     rest.user = req.user._id
 
     const category = await Category.findByIdAndUpdate(id, rest)
