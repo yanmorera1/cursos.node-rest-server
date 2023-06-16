@@ -34,3 +34,12 @@ export const productExists = async (id) => {
         throw new Error(`Product with id ${id} doesnt exists`)
     }
 }
+
+export const allowCollections = (collection = '', collections = []) => {
+    const isIncluded = collections.includes(collection)
+    if (!isIncluded) {
+        throw new Error($`Collection ${collection} isnt allowed`)
+    }
+
+    return true
+}

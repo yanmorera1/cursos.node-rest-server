@@ -5,9 +5,11 @@ import { router as authRouter } from '../routes/auth.routes.js'
 import { router as categoriesRouter } from '../routes/categories.routes.js'
 import { router as productsRouter } from '../routes/products.routes.js'
 import { router as searchRouter } from '../routes/search.routes.js'
+import { router as uploadsRouter } from '../routes/uploads.routes.js'
 import { dbConnection } from '../database/config.db.js'
 import swaggerUi from 'swagger-ui-express'
 import { openapiSpecification } from '../docs/swagger.docs.js'
+import fileUpload from 'express-fileupload'
 
 export default class Server {
     constructor() {
@@ -19,6 +21,7 @@ export default class Server {
             users: '/api/users',
             products: '/api/products',
             search: '/api/search',
+            uploads: '/api/uploads',
         }
 
         //DB connection
@@ -46,6 +49,14 @@ export default class Server {
         this.app.use(express.json())
         //public folder
         this.app.use(express.static('public'))
+        //file upload
+        this.app.use(
+            fileUpload({
+                useTempFiles: true,
+                tempFileDir: '/tmp/',
+                createParentPath: true,
+            })
+        )
     }
 
     routes() {
@@ -54,6 +65,7 @@ export default class Server {
         this.app.use(this.paths.categories, categoriesRouter)
         this.app.use(this.paths.products, productsRouter)
         this.app.use(this.paths.search, searchRouter)
+        this.app.use(this.paths.uploads, uploadsRouter)
     }
 
     listen() {

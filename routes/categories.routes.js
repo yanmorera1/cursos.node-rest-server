@@ -12,7 +12,7 @@ import {
     getCategory,
     updateCategory,
 } from '../controllers/categories.controller.js'
-import { categoryExists } from '../helpers/db-validators.js'
+import { categoryExists } from '../helpers/index.js'
 
 export const router = Router()
 

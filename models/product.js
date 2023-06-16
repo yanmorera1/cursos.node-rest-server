@@ -31,6 +31,9 @@ export const ProductSchema = Schema({
         ref: 'User',
         required: true,
     },
+    img: {
+        type: String,
+    },
 })
 
 ProductSchema.methods.toJSON = function () {

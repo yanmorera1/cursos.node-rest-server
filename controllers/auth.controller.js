@@ -1,8 +1,7 @@
 import { request, response } from 'express'
 import { User } from '../models/index.js'
 import bcryptjs from 'bcryptjs'
-import { generateJWT } from '../helpers/generate-jwt.js'
-import { googleVerify } from '../helpers/google-verify.js'
+import { generateJWT, googleVerify } from '../helpers/index.js'
 
 export const login = async (req, res = response) => {
     const { email, password } = req.body
