@@ -5,6 +5,7 @@ import {
     getImage,
     loadFile,
     updateImage,
+    updateImageCloudinary,
 } from '../controllers/uploads.controller.js'
 import { allowCollections } from '../helpers/index.js'
 
@@ -33,7 +34,7 @@ router.put(
         ),
         validateFields,
     ],
-    updateImage
+    updateImageCloudinary
 )
 
 router.get(

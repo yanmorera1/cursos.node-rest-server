@@ -4,7 +4,20 @@ import { User, Product } from '../models/index.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
+import { v2 as cloudinary } from 'cloudinary'
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+const configureCloudinary = () => {
+    const { CLOUDINARY_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
+        process.env
+
+    cloudinary.config({
+        cloud_name: CLOUDINARY_NAME,
+        api_key: CLOUDINARY_API_KEY,
+        api_secret: CLOUDINARY_API_SECRET,
+    })
+}
 
 export const loadFile = async (req, res = response) => {
     try {
@@ -98,5 +111,49 @@ export const getImage = async (req, res = response) => {
         }
     }
 
-    res.json({ msg: `Placeholoder` })
+    const placeHolderPath = path.join(__dirname, '../assets', 'no-image.jpg')
+    if (fs.existsSync(placeHolderPath)) {
+        return res.sendFile(placeHolderPath)
+    }
+}
+
+export const updateImageCloudinary = async (req, res = response) => {
+    configureCloudinary()
+    const { id, collection } = req.params
+    let model
+    switch (collection) {
+        case 'users':
+            model = await User.findById(id)
+            if (!model) {
+                return res.status(400).json({
+                    msg: `User with id ${id} does not exists`,
+                })
+            }
+            break
+        case 'products':
+            model = await Product.findById(id)
+            if (!model) {
+                return res.status(400).json({
+                    msg: `Product with id ${id} does not exists`,
+                })
+            }
+            break
+        default:
+            return res.status(500).json({
+                msg: 'I forgot to validate this',
+            })
+    }
+
+    //clean previous images
+    if (model.img) {
+        //TODO: implement this
+    }
+
+    const { tempFilePath } = req.files.file
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath)
+
+    model.img = secure_url
+    await model.save()
+
+    res.json(model)
 }
