@@ -144,7 +144,6 @@ export const updateImageCloudinary = async (req, res = response) => {
             })
     }
 
-    //clean previous images
     if (model.img) {
         const nameArr = model.img.split('/')
         const name = nameArr[nameArr.length - 1]
